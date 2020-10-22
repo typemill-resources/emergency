@@ -1,0 +1,124 @@
+{% extends '/layout.twig' %}
+{% set published = metatabs.meta.manualdate ? metatabs.meta.manualdate : metatabs.meta.modified %}
+
+{% block title %}{{ metatabs.meta.title }} | {{ settings.title }}{% endblock %}
+
+{% block content %}
+
+	{% if home %}
+
+		<article class="post h-entry">
+
+			<header>
+				<h1 class="p-name">{{ title }}</h1>
+			</header>
+		
+			<div class="content">{{ content }}</div>
+
+		</article>
+
+		{% set pagelist = getPageList(navigation, settings.themes.emergency.listpages, base_url) %}
+
+		<ol class="postlist" reversed>
+
+			{% for element in pagelist.folderContent %}
+
+				{% if pagelist.contains == "posts" %}
+
+					{% set post = getPageMeta(settings, element) %}
+					{% set date = element.order[0:4] ~ '-' ~ element.order[4:2] ~ '-' ~ element.order[6:2] %}
+
+					<li>
+						<a href="{{ element.urlAbs }}">{{ post.meta.title }}</a> <time datetime="{{date}}">({{ date | date("d.m.Y") }})</time>
+					</li>
+
+				{% elseif pagelist.contains == "pages" %}
+					
+					{% set page = getPageMeta(settings, element) %}
+
+					<li>
+						<a href="{{ element.urlAbs }}">{{ page.meta.title }}</a>
+					</li>
+				
+				{% endif %}
+
+			{% endfor %}
+
+		</ol>
+
+	{% elseif item.elementType == 'folder' %}
+		
+		<article class="post h-entry">
+
+			{% include 'breadcrumb.twig' %}
+	
+			<header>
+				<h1 class="p-name">{{ title }}</h1>
+			</header>
+			
+			<div class="content">{{ content }}</div>
+
+		</article>
+		
+		{% if item.contains == 'pages' %}
+
+			<ol class="postlist" reversed>
+
+				{% for element in item.folderContent %}
+
+					<li>
+						<a href="{{ element.urlAbs }}">{{ element.name }}</a> 
+					</li>
+
+				{% endfor %}
+
+			</ol>
+
+		{% elseif item.contains == 'posts' %}
+
+			<ol class="postlist" reversed>
+
+			{% for element in item.folderContent %}
+
+				{% set post = getPageMeta(settings, element) %}
+				{% set date = element.order[0:4] ~ '-' ~ element.order[4:2] ~ '-' ~ element.order[6:2] %}
+
+				<li>
+					<a href="{{ element.urlAbs }}">{{ post.meta.title }}</a> <time datetime="{{date}}">({{ date | date("d.m.Y") }})</time>
+				</li>
+								
+			{% endfor %}
+			
+			</ol>
+
+		{% endif %}
+
+	{% elseif item.elementType == 'file' %}
+		
+		<article class="post h-entry">
+
+			{% include 'breadcrumb.twig' %}
+
+			<header>
+				<h1 class="p-name">{{ title }}</h1>
+				<small>{{settings.themes.emergency.modifiedText}} <time class="dt-published" datetime="{{ published }}">{{ published|date(settings.themes.emergency.modifiedFormat)  }}</time></small>
+			</header>
+		
+			<div class="content">{{ content }}</div>
+		
+			<footer class="footernav">
+
+				{% if item.prevItem %}
+					<a href="{{ item.prevItem.urlRel }}" class="iconlink"><svg class="icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><path d="M12.586 27.414l-10-10c-0.781-0.781-0.781-2.047 0-2.828l10-10c0.781-0.781 2.047-0.781 2.828 0s0.781 2.047 0 2.828l-6.586 6.586h19.172c1.105 0 2 0.895 2 2s-0.895 2-2 2h-19.172l6.586 6.586c0.39 0.39 0.586 0.902 0.586 1.414s-0.195 1.024-0.586 1.414c-0.781 0.781-2.047 0.781-2.828 0z"></path></svg> {{ item.prevItem.name }}</a>
+				{% endif %}
+				{% if item.nextItem %}
+					<a href="{{ item.nextItem.urlRel }}" class="iconlink">{{ item.nextItem.name }} <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><path d="M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z"></path></svg></a>
+				{% endif %}
+
+			</footer>
+
+		</article>
+	
+	{% endif %}
+	
+{% endblock %}

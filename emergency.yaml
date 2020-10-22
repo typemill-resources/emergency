@@ -1,0 +1,65 @@
+name: Emergency Theme
+version: 1.1.0
+description: The Emergency Theme is a dynamic-cms-fork from the static emergency site by Max Böck. The theme is perfect for quick help-sites and small bandwidth. 
+author: Max Böck, forked by Trendschau
+homepage: https://mxb.dev/blog/emergency-website-kit/
+licence: MIT
+
+settings:
+  listpages: /news
+  footer1: "### Contact\r\n\r\nCall us:  \r\n+11-22-33333"
+  footer2: "### Formalia\r\n\r\n* [Imprint](/formalia/imprint)\r\n* [Privacy](/formalia/privacy)"
+  footer3: 'This is a service of organisation ABC'
+
+forms:
+  fields:
+
+    listpages:
+      type: text
+      label: List Entries from Folder
+      placeholder: /blog
+      description: Add a path to a folder from which you want to list entries on startpage
+
+    brandcolor:
+      type: text
+      label: Choose a brand color (hex-value or html-name)
+      placeholder: #ddd
+
+    fieldset1:
+      type: fieldset
+      legend: Footer columns
+      fields:
+        footercolumns:
+          type: checkboxlist
+          label: Activate footer columns
+          options:
+            footer1: Column 1
+            footer2: Column 2
+            footer3: Column 3     
+        footer1:
+          type: textarea
+          label: footer column 1 (use markdown)
+        footer2:
+          type: textarea
+          label: footer column 2 (use markdown)
+        footer3:
+          type: textarea
+          label: footer column 3 (use markdown)
+
+    fieldset2:
+      type: fieldset
+      legend: Last Modified
+      fields:
+
+        modifiedText:
+          type: text
+          label: Last Modified Text
+          placeholder: Last Updated
+
+        modifiedFormat:
+          type: select
+          label: Last Modified Format
+          placeholder: 'Choose date format'
+          options:
+            'm/d/Y': 01/20/2020
+            'd.m.Y': 20.01.2020
